@@ -4,7 +4,7 @@ import puzzles from "./puzzles.json";
 import colors from "./colors.json";
 import Grid from "./components/Grid";
 
-const curretColors = colors.baseColors;
+const currentColors = colors.baseColors;
 
 export default function App() {
   const [currentPuzzleIndex, setCurrentPuzzleIndex] = useState(null);
@@ -22,16 +22,21 @@ export default function App() {
   };
 
   const isNumberMaxedOut = (number, currentGrid) => {
-    const occurrences = new Set();
+    let totalOccurrences = 0;
+    let rowOccurrences = 0;
 
     for (let row = 0; row < currentGrid.length; row++) {
+      let foundInRow = false;
       for (let col = 0; col < currentGrid[row].length; col++) {
         if (currentGrid[row][col] === number) {
-          occurrences.add(`r${row}c${col}`);
+          totalOccurrences += 1;
+          foundInRow = true;
         }
       }
+      if (foundInRow) rowOccurrences += 1;
     }
-    return occurrences.size === 9;
+
+    return totalOccurrences === 9 || rowOccurrences === 9;
   };
 
   const checkSolution = () => {
@@ -96,8 +101,8 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const newNumberDisabled = curretColors.map((_, i) =>
-      isNumberMaxedOut(i + 1, grid)
+    const newNumberDisabled = currentColors.map((_, i) =>
+      isNumberMaxedOut(i + 1, grid),
     );
     setNumberDisabled(newNumberDisabled);
   }, [grid]);
@@ -125,7 +130,7 @@ export default function App() {
         initialGrid={initialGrid}
         onCellSelect={handleCellSelect}
         selectedCell={selectedCell}
-        baseColors={curretColors}
+        baseColors={currentColors}
       />
       <div className="color-buttons">
         <div className="color-buttons">
@@ -135,7 +140,7 @@ export default function App() {
                 numberDisabled[i] ? "button--disabled" : ""
               }`}
               key={i}
-              style={{ backgroundColor: curretColors[i] }}
+              style={{ backgroundColor: currentColors[i] }}
               onClick={() => handleNumberSelect(i + 1)}
               disabled={numberDisabled[i]}
             >
