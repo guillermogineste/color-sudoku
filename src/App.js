@@ -113,7 +113,7 @@ export default function App() {
 
   return (
     <div className="App">
-      <h1 className="heading heading--one">Marina's Color Sudoku</h1>
+      <h1 className="heading heading--one">🎁 Marina's Color Sudoku 🎁</h1>
       <div className="action-bar">
         <div className="action-buttons">
           <button className="button button--action" onClick={loadNewPuzzle}>
