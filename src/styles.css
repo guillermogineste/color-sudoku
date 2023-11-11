@@ -27,7 +27,8 @@
   text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: top;
+  padding-top: 10vh;
   align-items: center;
   height: 100vh;
   background: var(--bg-app);
@@ -77,6 +78,7 @@
   color: transparent;
   box-shadow: var(--cell-shadow);
   position: relative;
+  -webkit-tap-highlight-color: transparent;
 }
 @media (min-width: 380px) {
   .button--color {
@@ -90,7 +92,6 @@
     height: 8vw;
   }
 }
-
 @media (min-width: 720px) {
   .button--color {
     width: 6vw;
@@ -116,6 +117,28 @@
   transform: scale(0.8);
   box-shadow: var(--cell-shadow);
 }
+.button--action {
+  padding: 12px;
+  font-size: 0.8em;
+  letter-spacing: 1px;
+  font-weight: 300;
+}
+
+@media (min-width: 520px) {
+  .button--action {
+    padding: 16px;
+    font-size: 1em;
+    letter-spacing: 0.5px;
+  }
+}
+@media (min-width: 950px) {
+  .button--action {
+    padding: 16px;
+    font-size: 1.1em;
+    letter-spacing: 0.2px;
+  }
+}
+
 .action-buttons {
   display: flex;
   gap: 8px;
@@ -160,6 +183,7 @@
   box-shadow: var(--cell-shadow);
   transition: all 0.1s ease-in;
   border: 0.5px solid lightgrey;
+  -webkit-tap-highlight-color: transparent;
 }
 .cell:hover {
   z-index: 100;
@@ -189,15 +213,47 @@
 }
 .cell--non-editable::after {
   content: "";
-  width: 8px;
-  height: 8px;
+  /* width: 8px;
+  height: 8px; */
+  width: 5px;
+  height: 5px;
   background-color: var(--bg-cell-non-editable);
   border-radius: 50%;
   position: absolute;
-  right: 6px;
-  bottom: 6px;
+  /* right: 6px;
+  bottom: 6px; */
+  right: 4px;
+  bottom: 4px;
   box-shadow: var(--inset-shadow);
   transition: all 0.1s ease-in;
+}
+@media (min-width: 430px) {
+  .cell--non-editable::after {
+    width: 6px;
+    height: 6px;
+    right: 4px;
+    bottom: 4px;
+  }
+}
+@media (min-width: 520px) {
+  .cell--non-editable::after {
+    width: 7px;
+    height: 7px;
+    right: 5px;
+    bottom: 5px;
+  }
+}
+@media (min-width: 720px) {
+  .cell--non-editable::after {
+    width: 8px;
+    height: 8px;
+    right: 6px;
+    bottom: 6px;
+  }
+}
+@media (min-width: 950px) {
+  .cell--non-editable::after {
+  }
 }
 .cell--selected {
   box-shadow: var(--cell-selected-shadow);

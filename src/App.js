@@ -4,7 +4,7 @@ import puzzles from "./puzzles.json";
 import colors from "./colors.json";
 import Grid from "./components/Grid";
 
-const currentColors = colors.baseColors;
+const currentColors = colors.softPalette;
 
 export default function App() {
   const [currentPuzzleIndex, setCurrentPuzzleIndex] = useState(null);
@@ -113,7 +113,7 @@ export default function App() {
 
   return (
     <div className="App">
-      <h1 className="heading heading--one">🎁 Marina's Color Sudoku 🎁</h1>
+      <h1 className="heading heading--one">Coloroku</h1>
       <div className="action-bar">
         <div className="action-buttons">
           <button className="button button--action" onClick={loadNewPuzzle}>
