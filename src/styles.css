@@ -5,7 +5,7 @@
   --bg-app: rgb(255, 255, 255);
   --bg-cell: rgb(244, 244, 244);
   --bg-cell-non-editable: rgb(255, 255, 255);
-  --cell-size: 64px;
+  --cell-size: 8vw;
   --cell-gap: 4px;
   --cell-border-radius: 4px;
   --cell-shadow: 0 1px 1px rgba(0, 0, 0, 0.08), 0 2px 2px rgba(0, 0, 0, 0.07),
@@ -27,7 +27,8 @@
   text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: top;
+  padding-top: 10vh;
   align-items: center;
   height: 100vh;
   background: var(--bg-app);
@@ -64,16 +65,44 @@
   font-size: 1.1em;
 }
 .button:hover {
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0.1), 0 0 2px rgba(0, 0, 0, 0.095),
-    0 0 4px rgba(0, 0, 0, 0.09), 0 0 8px rgba(0, 0, 0, 0.085);
+  box-shadow:
+    0 0 1px rgba(0, 0, 0, 0.1),
+    0 0 2px rgba(0, 0, 0, 0.095),
+    0 0 4px rgba(0, 0, 0, 0.09),
+    0 0 8px rgba(0, 0, 0, 0.085);
   transform: scale(1.1);
 }
 .button--color {
-  width: 50px;
-  height: 50px;
+  width: 5vw;
+  height: 5vw;
   color: transparent;
   box-shadow: var(--cell-shadow);
   position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+@media (min-width: 380px) {
+  .button--color {
+    width: 9vw;
+    height: 9vw;
+  }
+}
+@media (min-width: 590px) {
+  .button--color {
+    width: 8vw;
+    height: 8vw;
+  }
+}
+@media (min-width: 720px) {
+  .button--color {
+    width: 6vw;
+    height: 6vw;
+  }
+}
+@media (min-width: 950px) {
+  .button--color {
+    width: 65px;
+    height: 65px;
+  }
 }
 .button--color:hover {
   transform: scale(1.1);
@@ -88,6 +117,28 @@
   transform: scale(0.8);
   box-shadow: var(--cell-shadow);
 }
+.button--action {
+  padding: 12px;
+  font-size: 0.8em;
+  letter-spacing: 1px;
+  font-weight: 300;
+}
+
+@media (min-width: 520px) {
+  .button--action {
+    padding: 16px;
+    font-size: 1em;
+    letter-spacing: 0.5px;
+  }
+}
+@media (min-width: 950px) {
+  .button--action {
+    padding: 16px;
+    font-size: 1.1em;
+    letter-spacing: 0.2px;
+  }
+}
+
 .action-buttons {
   display: flex;
   gap: 8px;
@@ -101,7 +152,6 @@
 .grid {
   display: grid;
   gap: var(--cell-gap);
-  padding: 8px;
 }
 
 .grid > :nth-child(3n) {
@@ -126,17 +176,31 @@
 .cell {
   cursor: pointer;
   background: var(--bg-cell);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: var(--cell-size);
-  width: var(--cell-size);
+  height: 9vw;
+  width: 9vw;
   border-radius: var(--cell-border-radius);
   color: transparent;
   box-shadow: var(--cell-shadow);
   transition: all 0.1s ease-in;
   border: 0.5px solid lightgrey;
+  -webkit-tap-highlight-color: transparent;
 }
+.cell:hover {
+  z-index: 100;
+}
+@media (min-width: 720px) {
+  .cell {
+    height: 7vw;
+    width: 7vw;
+  }
+}
+@media (min-width: 950px) {
+  .cell {
+    height: 70px;
+    width: 70px;
+  }
+}
+
 .cell--non-editable {
   display: flex;
   justify-content: center;
@@ -149,15 +213,47 @@
 }
 .cell--non-editable::after {
   content: "";
-  width: 8px;
-  height: 8px;
+  /* width: 8px;
+  height: 8px; */
+  width: 5px;
+  height: 5px;
   background-color: var(--bg-cell-non-editable);
   border-radius: 50%;
   position: absolute;
-  right: 6px;
-  bottom: 6px;
+  /* right: 6px;
+  bottom: 6px; */
+  right: 4px;
+  bottom: 4px;
   box-shadow: var(--inset-shadow);
   transition: all 0.1s ease-in;
+}
+@media (min-width: 430px) {
+  .cell--non-editable::after {
+    width: 6px;
+    height: 6px;
+    right: 4px;
+    bottom: 4px;
+  }
+}
+@media (min-width: 520px) {
+  .cell--non-editable::after {
+    width: 7px;
+    height: 7px;
+    right: 5px;
+    bottom: 5px;
+  }
+}
+@media (min-width: 720px) {
+  .cell--non-editable::after {
+    width: 8px;
+    height: 8px;
+    right: 6px;
+    bottom: 6px;
+  }
+}
+@media (min-width: 950px) {
+  .cell--non-editable::after {
+  }
 }
 .cell--selected {
   box-shadow: var(--cell-selected-shadow);
@@ -166,6 +262,7 @@
 }
 .cell--selected:hover {
   transform: scale(1.2);
+  z-index: 100;
 }
 
 .cell--conflict {
