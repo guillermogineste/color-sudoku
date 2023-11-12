@@ -5,24 +5,15 @@ import colors from "./colors.json";
 import Grid from "./components/Grid";
 
 const currentColors = colors.baseColors;
-const currentPuzzleIndez = 0;
-const currentPuzzle = puzzles.RawSudoku[currentPuzzleIndez];
-const currentPuzzleSolution = puzzles.SolvedSudoku[currentPuzzleIndez];
+const currentPuzzleIndex = 0;
+const currentPuzzle = puzzles.RawSudoku[currentPuzzleIndex];
+const currentPuzzleSolution = puzzles.SolvedSudoku[currentPuzzleIndex];
 
 export default function App() {
-  const [currentPuzzleIndex, setCurrentPuzzleIndex] = useState(null);
   const [grid, setGrid] = useState([]);
   const [initialGrid, setInitialGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState({ row: null, col: null });
   const [numberDisabled, setNumberDisabled] = useState(Array(9).fill(false));
-
-  const loadRandomPuzzle = () => {
-    const randomIndex = Math.floor(Math.random() * puzzles.RawSudoku.length);
-    setCurrentPuzzleIndex(randomIndex);
-    const newPuzzle = puzzles.RawSudoku[randomIndex].map((row) => [...row]);
-    setGrid(newPuzzle);
-    setInitialGrid(newPuzzle.map((row) => [...row]));
-  };
 
   const isNumberMaxedOut = (number, currentGrid) => {
     let totalOccurrences = 0;
@@ -43,7 +34,7 @@ export default function App() {
   };
 
   const checkSolution = () => {
-    const solution = puzzles.SolvedSudoku[currentPuzzleIndex];
+    const solution = currentPuzzleSolution;
     for (let i = 0; i < 9; i++) {
       for (let j = 0; j < 9; j++) {
         if (grid[i][j] !== solution[i][j]) {
@@ -90,6 +81,9 @@ export default function App() {
   };
 
   useEffect(() => {
+    setGrid(currentPuzzle.map((row) => [...row]));
+    setInitialGrid(currentPuzzle.map((row) => [...row]));
+
     window.addEventListener("mousedown", handleOutsideClick);
     window.addEventListener("touchstart", handleOutsideClick);
 
@@ -100,28 +94,17 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    loadRandomPuzzle();
-  }, []);
-
-  useEffect(() => {
     const newNumberDisabled = currentColors.map((_, i) =>
       isNumberMaxedOut(i + 1, grid),
     );
     setNumberDisabled(newNumberDisabled);
   }, [grid]);
 
-  const loadNewPuzzle = () => {
-    loadRandomPuzzle();
-  };
-
   return (
     <div className="App">
       <h1 className="heading heading--one">Coloroku</h1>
       <div className="action-bar">
         <div className="action-buttons">
-          <button className="button button--action" onClick={loadNewPuzzle}>
-            New Game
-          </button>
           <button className="button button--action" onClick={checkSolution}>
             Check Puzzle
           </button>
