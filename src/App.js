@@ -4,7 +4,10 @@ import puzzles from "./puzzles.json";
 import colors from "./colors.json";
 import Grid from "./components/Grid";
 
-const currentColors = colors.softPalette;
+const currentColors = colors.baseColors;
+const currentPuzzleIndez = 0;
+const currentPuzzle = puzzles.RawSudoku[currentPuzzleIndez];
+const currentPuzzleSolution = puzzles.SolvedSudoku[currentPuzzleIndez];
 
 export default function App() {
   const [currentPuzzleIndex, setCurrentPuzzleIndex] = useState(null);
