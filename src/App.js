@@ -1,8 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./styles.css";
 import puzzles from "./puzzles.json";
 import colors from "./colors.json";
 import Grid from "./components/Grid";
+import {
+  AlertDialog,
+  AlertDialogLabel,
+  AlertDialogDescription,
+  AlertDialogOverlay,
+  AlertDialogContent,
+} from "@reach/alert-dialog";
+import partyPopperImage from "./images/party-popper_1f389.png";
 
 const currentColors = colors.baseColors;
 const currentPuzzleIndex = 0;
@@ -14,6 +22,14 @@ export default function App() {
   const [initialGrid, setInitialGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState({ row: null, col: null });
   const [numberDisabled, setNumberDisabled] = useState(Array(9).fill(false));
+  const [isPuzzleSolved, setIsPuzzleSolved] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+
+  const closeBtnRef = useRef(null);
+
+  const solvePuzzleForDebugging = () => {
+    setGrid(currentPuzzleSolution.map((row) => [...row]));
+  };
 
   const isNumberMaxedOut = (number, currentGrid) => {
     let totalOccurrences = 0;
@@ -33,17 +49,41 @@ export default function App() {
     return totalOccurrences === 9 || rowOccurrences === 9;
   };
 
-  const checkSolution = () => {
+  // const checkSolution = () => {
+  //   const solution = currentPuzzleSolution;
+  //   for (let i = 0; i < 9; i++) {
+  //     for (let j = 0; j < 9; j++) {
+  //       if (grid[i][j] !== solution[i][j]) {
+  //         alert("Incorrect solution!");
+  //         return;
+  //       }
+  //     }
+  //   }
+  //   alert("Congratulations! You've solved the puzzle!");
+  // };
+
+  const checkIfPuzzleSolved = () => {
     const solution = currentPuzzleSolution;
+
+    if (!grid.length || grid.some((row) => !row)) {
+      return;
+    }
+
     for (let i = 0; i < 9; i++) {
       for (let j = 0; j < 9; j++) {
-        if (grid[i][j] !== solution[i][j]) {
-          alert("Incorrect solution!");
+        if (!grid[i] || grid[i][j] !== solution[i][j]) {
+          setIsPuzzleSolved(false);
+          console.log("Puzzle not solved");
           return;
         }
       }
     }
-    alert("Congratulations! You've solved the puzzle!");
+    console.log("Puzzle solved");
+    setShowDialog(true);
+    setIsPuzzleSolved(true);
+  };
+  const closeDialog = () => {
+    setShowDialog(false);
   };
 
   const handleOutsideClick = (event) => {
@@ -98,6 +138,8 @@ export default function App() {
       isNumberMaxedOut(i + 1, grid),
     );
     setNumberDisabled(newNumberDisabled);
+
+    checkIfPuzzleSolved();
   }, [grid]);
 
   return (
@@ -105,9 +147,9 @@ export default function App() {
       <h1 className="heading heading--one">Coloroku</h1>
       <div className="action-bar">
         <div className="action-buttons">
-          <button className="button button--action" onClick={checkSolution}>
+          {/* <button className="button button--action" onClick={checkSolution}>
             Check Puzzle
-          </button>
+          </button> */}
         </div>
       </div>
       <Grid
@@ -135,6 +177,42 @@ export default function App() {
           ))}
         </div>
       </div>
+      <AlertDialog
+        isOpen={showDialog}
+        onDismiss={closeDialog}
+        leastDestructiveRef={closeBtnRef}
+        className="full-screen-dialog-overlay"
+      >
+        <AlertDialogOverlay />
+        <AlertDialogContent className="full-screen-dialog-content">
+          <img
+            src={partyPopperImage}
+            className="success-image"
+            alt="Party Popper"
+          />
+          <AlertDialogLabel className="heading heading--one">
+            Congratulations!
+          </AlertDialogLabel>
+          <AlertDialogDescription className="heading heading--two">
+            You solved the puzzle
+          </AlertDialogDescription>
+          <div className="alert-buttons">
+            <button
+              className="button button--close"
+              ref={closeBtnRef}
+              onClick={closeDialog}
+            >
+              Close
+            </button>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
+      {/* <button
+        className="button button--debug"
+        onClick={solvePuzzleForDebugging}
+      >
+        Solve Puzzle (Debug)
+      </button> */}
     </div>
   );
 }
