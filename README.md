@@ -11,3 +11,4 @@ Created with CodeSandbox
 - [ ] Remove opacity from colors at the bottom, keep small
 - [ ] Add check specific cell button
 - [ ] Lower buttons at the bottom
+- [ ] Add undo functionality
