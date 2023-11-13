@@ -12,8 +12,8 @@ import {
 } from "@reach/alert-dialog";
 import partyPopperImage from "./images/party-popper_1f389.png";
 
-const currentColors = colors.paleBlue;
-const currentPuzzleIndex = 1;
+const currentColors = colors["Nov13-2023"];
+const currentPuzzleIndex = 0;
 const currentPuzzle = puzzles.RawSudoku[currentPuzzleIndex];
 const currentPuzzleSolution = puzzles.SolvedSudoku[currentPuzzleIndex];
 
