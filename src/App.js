@@ -11,11 +11,18 @@ import {
   AlertDialogContent,
 } from "@reach/alert-dialog";
 import partyPopperImage from "./images/party-popper_1f389.png";
+import pauseImage from "./images/pause-button_23f8-fe0f.png";
 
 const currentColors = colors["Nov14-2023"];
 const currentPuzzleIndex = 1;
 const currentPuzzle = puzzles.RawSudoku[currentPuzzleIndex];
 const currentPuzzleSolution = puzzles.SolvedSudoku[currentPuzzleIndex];
+
+const formatTime = (totalSeconds) => {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+};
 
 export default function App() {
   const [grid, setGrid] = useState([]);
@@ -23,7 +30,27 @@ export default function App() {
   const [selectedCell, setSelectedCell] = useState({ row: null, col: null });
   const [numberDisabled, setNumberDisabled] = useState(Array(9).fill(false));
   const [isPuzzleSolved, setIsPuzzleSolved] = useState(false);
-  const [showDialog, setShowDialog] = useState(false);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [showPauseDialog, setShowPauseDialog] = useState(false);
+  const [timer, setTimer] = useState(0);
+  const [isTimerPaused, setIsTimerPaused] = useState(false);
+
+  useEffect(() => {
+    let interval;
+    if (!isPuzzleSolved && !isTimerPaused) {
+      interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer + 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isPuzzleSolved, isTimerPaused]);
+
+  const togglePause = () => {
+    setIsTimerPaused(!isTimerPaused);
+    if (!isPuzzleSolved) {
+      setShowPauseDialog(!showPauseDialog);
+    }
+  };
 
   const closeBtnRef = useRef(null);
 
@@ -79,11 +106,15 @@ export default function App() {
       }
     }
     console.log("Puzzle solved");
-    setShowDialog(true);
+    setShowSuccessDialog(true);
     setIsPuzzleSolved(true);
   };
   const closeDialog = () => {
-    setShowDialog(false);
+    setShowSuccessDialog(false);
+    setShowPauseDialog(false);
+    if (!isPuzzleSolved) {
+      setIsTimerPaused(false);
+    }
   };
 
   const handleOutsideClick = (event) => {
@@ -146,6 +177,13 @@ export default function App() {
     <div className="App">
       <h1 className="heading heading--one">Coloroku</h1>
       <div className="action-bar">
+        <h2 className="heading heading--two">{formatTime(timer)}</h2>
+        <button className="button button--pause" onClick={togglePause}>
+          ⏸︎
+        </button>
+      </div>
+
+      <div className="action-bar">
         <div className="action-buttons">
           {/* <button className="button button--action" onClick={checkSolution}>
             Check Puzzle
@@ -178,7 +216,7 @@ export default function App() {
         </div>
       </div>
       <AlertDialog
-        isOpen={showDialog}
+        isOpen={showSuccessDialog}
         onDismiss={closeDialog}
         leastDestructiveRef={closeBtnRef}
         className="full-screen-dialog-overlay"
@@ -194,8 +232,39 @@ export default function App() {
             Congratulations!
           </AlertDialogLabel>
           <AlertDialogDescription className="heading heading--two">
-            You solved the puzzle
+            You solved the puzzle in {formatTime(timer)}
           </AlertDialogDescription>
+          <div className="alert-buttons">
+            <button
+              className="button button--close"
+              ref={closeBtnRef}
+              onClick={closeDialog}
+            >
+              Close
+            </button>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
+      <AlertDialog
+        isOpen={showPauseDialog}
+        onDismiss={closeDialog}
+        leastDestructiveRef={closeBtnRef}
+        className="full-screen-dialog-overlay"
+      >
+        <AlertDialogOverlay />
+        <AlertDialogContent className="full-screen-dialog-content">
+          <img src={pauseImage} className="success-image" alt="Party Popper" />
+
+          <AlertDialogLabel className="heading heading--one">
+            Paused
+          </AlertDialogLabel>
+          <button
+            className="button button--action"
+            ref={closeBtnRef}
+            onClick={closeDialog}
+          >
+            Keep going
+          </button>
           <div className="alert-buttons">
             <button
               className="button button--close"
