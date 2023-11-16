@@ -5,12 +5,13 @@ const Cell = ({
   onSelect,
   initialCellValue,
   isSelected,
-  backgroundColor
+  backgroundColor,
 }) => {
   const selectedClass = isSelected ? "cell--selected" : "";
   const editableClass =
     initialCellValue !== 0 ? "cell--non-editable" : "cell--editable";
-  const cellClass = `cell ${selectedClass} ${editableClass}`;
+  const emptyClass = value == 0 ? "cell--empty" : "";
+  const cellClass = `cell ${selectedClass} ${editableClass} ${emptyClass}`;
 
   const style = backgroundColor ? { backgroundColor } : {};
 

@@ -177,9 +177,9 @@ export default function App() {
     <div className="App">
       <h1 className="heading heading--one">Coloroku</h1>
       <div className="action-bar">
-        <h2 className="heading heading--two">{formatTime(timer)}</h2>
+        <p className="timer">{formatTime(timer)}</p>
         <button className="button button--pause" onClick={togglePause}>
-          ⏸︎
+          <span class="material-symbols-sharp">pause</span>
         </button>
       </div>
 
@@ -198,23 +198,23 @@ export default function App() {
         selectedCell={selectedCell}
         baseColors={currentColors}
       />
+
       <div className="color-buttons">
-        <div className="color-buttons">
-          {Array.from({ length: 9 }, (_, i) => (
-            <button
-              className={`button button--color ${
-                numberDisabled[i] ? "button--disabled" : ""
-              }`}
-              key={i}
-              style={{ backgroundColor: currentColors[i] }}
-              onClick={() => handleNumberSelect(i + 1)}
-              disabled={numberDisabled[i]}
-            >
-              {i + 1}
-            </button>
-          ))}
-        </div>
+        {Array.from({ length: 9 }, (_, i) => (
+          <button
+            className={`button button--color ${
+              numberDisabled[i] ? "button--disabled" : ""
+            }`}
+            key={i}
+            style={{ backgroundColor: currentColors[i] }}
+            onClick={() => handleNumberSelect(i + 1)}
+            disabled={numberDisabled[i]}
+          >
+            {i + 1}
+          </button>
+        ))}
       </div>
+
       <AlertDialog
         isOpen={showSuccessDialog}
         onDismiss={closeDialog}
