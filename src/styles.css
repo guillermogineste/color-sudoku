@@ -87,8 +87,10 @@
   transform: scale(1.1);
 }
 .button--color {
+  /* border-radius: 4px; */
   width: 5vw;
   height: 5vw;
+  padding: 12px;
   color: transparent;
   box-shadow: var(--cell-shadow);
   position: relative;
