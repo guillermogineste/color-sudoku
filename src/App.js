@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./styles.css";
-import puzzles from "./puzzles.json";
+import puzzles from "./original-puzzles.json";
 import colors from "./colors.json";
 import Grid from "./components/Grid";
 import {
@@ -13,8 +13,8 @@ import {
 import partyPopperImage from "./images/party-popper_1f389.png";
 import pauseImage from "./images/pause-button_23f8-fe0f.png";
 
-const currentColors = colors["Nov14-2023"];
-const currentPuzzleIndex = 2;
+const currentColors = colors["Nov16-2023"];
+const currentPuzzleIndex = 3;
 const currentPuzzle = puzzles.RawSudoku[currentPuzzleIndex];
 const currentPuzzleSolution = puzzles.SolvedSudoku[currentPuzzleIndex];
 
