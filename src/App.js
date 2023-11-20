@@ -36,6 +36,20 @@ export default function App() {
   const [isTimerPaused, setIsTimerPaused] = useState(false);
 
   useEffect(() => {
+    const savedData = {
+      grid,
+      initialGrid,
+      selectedCell,
+      timer,
+      isTimerPaused,
+      currentSet,
+      isPuzzleSolved,
+    };
+
+    localStorage.setItem("puzzleData", JSON.stringify(savedData));
+  }, [grid, initialGrid, selectedCell, timer, isTimerPaused]);
+
+  useEffect(() => {
     let interval;
     if (!isPuzzleSolved && !isTimerPaused) {
       interval = setInterval(() => {
@@ -152,6 +166,26 @@ export default function App() {
   };
 
   useEffect(() => {
+    const savedData = JSON.parse(localStorage.getItem("puzzleData"));
+
+    if (savedData && savedData.currentSet === currentSet) {
+      setGrid(savedData.grid || currentPuzzle.map((row) => [...row]));
+      setInitialGrid(
+        savedData.initialGrid || currentPuzzle.map((row) => [...row]),
+      );
+      setSelectedCell(savedData.selectedCell || { row: null, col: null });
+      setTimer(savedData.timer || 0);
+      setIsTimerPaused(savedData.isTimerPaused || false);
+    } else {
+      // Initialize with default values if no saved data or puzzle set has changed
+      localStorage.clear();
+      setGrid(currentPuzzle.map((row) => [...row]));
+      setInitialGrid(currentPuzzle.map((row) => [...row]));
+      setSelectedCell({ row: null, col: null });
+      setTimer(0);
+      setIsTimerPaused(false);
+    }
+
     setGrid(currentPuzzle.map((row) => [...row]));
     setInitialGrid(currentPuzzle.map((row) => [...row]));
 
@@ -276,7 +310,10 @@ export default function App() {
           </div>
         </AlertDialogContent>
       </AlertDialog>
-      {/* <button
+      {/* <button className="button button--debug" onClick={localStorage.clear()}>
+        Clear localStorage (Debug)
+      </button>
+      <button
         className="button button--debug"
         onClick={solvePuzzleForDebugging}
       >
