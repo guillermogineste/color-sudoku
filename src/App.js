@@ -24,30 +24,103 @@ const formatTime = (totalSeconds) => {
   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 };
 
+const getInitialState = () => {
+  try {
+    const savedDataString = localStorage.getItem("puzzleData");
+    const savedData = JSON.parse(savedDataString);
+    if (savedData && savedData.currentSet === currentSet) {
+      return savedData;
+    }
+  } catch (error) {
+    console.error("Error reading from local storage", error);
+  }
+  // Default values if no suitable saved state is available
+  return {
+    grid: currentPuzzle.map((row) => [...row]),
+    initialGrid: currentPuzzle.map((row) => [...row]),
+    selectedCell: { row: null, col: null },
+    timer: 0,
+    isTimerPaused: false,
+    isPuzzleSolved: false,
+  };
+};
+
+const initialState = getInitialState();
+
 export default function App() {
-  const [grid, setGrid] = useState([]);
-  const [initialGrid, setInitialGrid] = useState([]);
-  const [selectedCell, setSelectedCell] = useState({ row: null, col: null });
+  const [grid, setGrid] = useState(initialState.grid);
+  const [initialGrid, setInitialGrid] = useState(initialState.initialGrid);
+  const [selectedCell, setSelectedCell] = useState(initialState.selectedCell);
   const [numberDisabled, setNumberDisabled] = useState(Array(9).fill(false));
-  const [isPuzzleSolved, setIsPuzzleSolved] = useState(false);
+  const [isPuzzleSolved, setIsPuzzleSolved] = useState(
+    initialState.isPuzzleSolved,
+  );
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
-  const [showPauseDialog, setShowPauseDialog] = useState(false);
-  const [timer, setTimer] = useState(0);
-  const [isTimerPaused, setIsTimerPaused] = useState(false);
+  const [showPauseDialog, setShowPauseDialog] = useState(
+    initialState.isTimerPaused,
+  );
+  const [timer, setTimer] = useState(initialState.timer);
+  const [isTimerPaused, setIsTimerPaused] = useState(
+    initialState.isTimerPaused,
+  );
 
   useEffect(() => {
-    const savedData = {
-      grid,
-      initialGrid,
-      selectedCell,
-      timer,
-      isTimerPaused,
-      currentSet,
-      isPuzzleSolved,
-    };
+    // Only save to local storage if the grid is not empty
+    if (grid.length > 0 && initialGrid.length > 0) {
+      const savedData = {
+        grid,
+        initialGrid,
+        selectedCell,
+        timer,
+        isTimerPaused,
+        currentSet,
+        isPuzzleSolved,
+      };
 
-    localStorage.setItem("puzzleData", JSON.stringify(savedData));
-  }, [grid, initialGrid, selectedCell, timer, isTimerPaused]);
+      localStorage.setItem("puzzleData", JSON.stringify(savedData));
+    }
+  }, [grid, initialGrid, selectedCell, timer, isTimerPaused, isPuzzleSolved]);
+
+  useEffect(() => {
+    try {
+      const savedDataString = localStorage.getItem("puzzleData");
+      console.log("Saved Data String:", savedDataString); // Debugging statement
+
+      const savedData = JSON.parse(savedDataString);
+      console.log("Parsed Saved Data:", savedData); // Debugging statement
+
+      if (savedData && savedData.currentSet === currentSet) {
+        console.log("Loading saved data for current set");
+        setGrid(savedData.grid || currentPuzzle.map((row) => [...row]));
+        setInitialGrid(
+          savedData.initialGrid || currentPuzzle.map((row) => [...row]),
+        );
+        setSelectedCell(savedData.selectedCell || { row: null, col: null });
+        setTimer(savedData.timer || 0);
+        setIsTimerPaused(savedData.isTimerPaused || false);
+        setIsPuzzleSolved(savedData.isPuzzleSolved || false);
+      } else {
+        console.log("Initializing new grid or clearing local storage");
+        localStorage.clear();
+        setGrid(currentPuzzle.map((row) => [...row]));
+        setInitialGrid(currentPuzzle.map((row) => [...row]));
+        setSelectedCell({ row: null, col: null });
+        setTimer(0);
+        setIsTimerPaused(false);
+        setIsPuzzleSolved(false);
+      }
+    } catch (error) {
+      console.error("Error reading from local storage", error);
+    }
+
+    window.addEventListener("mousedown", handleOutsideClick);
+    window.addEventListener("touchstart", handleOutsideClick);
+
+    return () => {
+      window.removeEventListener("mousedown", handleOutsideClick);
+      window.removeEventListener("touchstart", handleOutsideClick);
+    };
+  }, []);
 
   useEffect(() => {
     let interval;
@@ -60,9 +133,12 @@ export default function App() {
   }, [isPuzzleSolved, isTimerPaused]);
 
   const togglePause = () => {
-    setIsTimerPaused(!isTimerPaused);
+    const newPausedState = !isTimerPaused;
+    setIsTimerPaused(newPausedState);
+
+    // Set the pause dialog visibility based on the timer's paused state
     if (!isPuzzleSolved) {
-      setShowPauseDialog(!showPauseDialog);
+      setShowPauseDialog(newPausedState);
     }
   };
 
@@ -164,39 +240,6 @@ export default function App() {
     newGrid[rowIndex][colIndex] = value;
     setGrid(newGrid);
   };
-
-  useEffect(() => {
-    const savedData = JSON.parse(localStorage.getItem("puzzleData"));
-
-    if (savedData && savedData.currentSet === currentSet) {
-      setGrid(savedData.grid || currentPuzzle.map((row) => [...row]));
-      setInitialGrid(
-        savedData.initialGrid || currentPuzzle.map((row) => [...row]),
-      );
-      setSelectedCell(savedData.selectedCell || { row: null, col: null });
-      setTimer(savedData.timer || 0);
-      setIsTimerPaused(savedData.isTimerPaused || false);
-    } else {
-      // Initialize with default values if no saved data or puzzle set has changed
-      localStorage.clear();
-      setGrid(currentPuzzle.map((row) => [...row]));
-      setInitialGrid(currentPuzzle.map((row) => [...row]));
-      setSelectedCell({ row: null, col: null });
-      setTimer(0);
-      setIsTimerPaused(false);
-    }
-
-    setGrid(currentPuzzle.map((row) => [...row]));
-    setInitialGrid(currentPuzzle.map((row) => [...row]));
-
-    window.addEventListener("mousedown", handleOutsideClick);
-    window.addEventListener("touchstart", handleOutsideClick);
-
-    return () => {
-      window.removeEventListener("mousedown", handleOutsideClick);
-      window.removeEventListener("touchstart", handleOutsideClick);
-    };
-  }, []);
 
   useEffect(() => {
     const newNumberDisabled = currentColors.map((_, i) =>
