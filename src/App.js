@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./styles.css";
-import puzzles from "./original-puzzles.json";
+import puzzles from "./puzzles.json";
 import colors from "./colors.json";
 import Grid from "./components/Grid";
 import {
@@ -13,10 +13,10 @@ import {
 import partyPopperImage from "./images/party-popper_1f389.png";
 import pauseImage from "./images/pause-button_23f8-fe0f.png";
 
-const currentColors = colors["Nov20-2023"];
-const currentPuzzleIndex = 4;
-const currentPuzzle = puzzles.RawSudoku[currentPuzzleIndex];
-const currentPuzzleSolution = puzzles.SolvedSudoku[currentPuzzleIndex];
+const currentSet = "Nov20-2023";
+const currentColors = colors[currentSet];
+const currentPuzzle = puzzles[currentSet].Puzzle;
+const currentPuzzleSolution = puzzles[currentSet].Solution;
 
 const formatTime = (totalSeconds) => {
   const minutes = Math.floor(totalSeconds / 60);
