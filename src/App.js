@@ -13,8 +13,8 @@ import {
 import partyPopperImage from "./images/party-popper_1f389.png";
 import pauseImage from "./images/pause-button_23f8-fe0f.png";
 
-const currentColors = colors["Nov16-2023"];
-const currentPuzzleIndex = 3;
+const currentColors = colors["Nov20-2023"];
+const currentPuzzleIndex = 4;
 const currentPuzzle = puzzles.RawSudoku[currentPuzzleIndex];
 const currentPuzzleSolution = puzzles.SolvedSudoku[currentPuzzleIndex];
 
