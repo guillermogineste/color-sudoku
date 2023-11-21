@@ -13,7 +13,7 @@ import {
 import partyPopperImage from "./images/party-popper_1f389.png";
 import pauseImage from "./images/pause-button_23f8-fe0f.png";
 
-const currentSet = "Nov20-2023";
+const currentSet = "Nov21-2023";
 const currentColors = colors[currentSet];
 const currentPuzzle = puzzles[currentSet].Puzzle;
 const currentPuzzleSolution = puzzles[currentSet].Solution;
@@ -256,7 +256,7 @@ export default function App() {
       <div className="action-bar">
         <p className="timer">{formatTime(timer)}</p>
         <button className="button button--pause" onClick={togglePause}>
-          <span class="material-symbols-sharp">pause</span>
+          <span className="material-symbols-sharp">pause</span>
         </button>
       </div>
 
