@@ -6,12 +6,14 @@ const Cell = ({
   initialCellValue,
   isSelected,
   backgroundColor,
+  isError,
 }) => {
   const selectedClass = isSelected ? "cell--selected" : "";
   const editableClass =
     initialCellValue !== 0 ? "cell--non-editable" : "cell--editable";
   const emptyClass = value == 0 ? "cell--empty" : "";
-  const cellClass = `cell ${selectedClass} ${editableClass} ${emptyClass}`;
+  const errorClass = isError ? "cell--error" : "";
+  const cellClass = `cell ${selectedClass} ${editableClass} ${emptyClass} ${errorClass}`;
 
   const style = backgroundColor ? { backgroundColor } : {};
 

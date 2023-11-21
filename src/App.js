@@ -63,6 +63,19 @@ export default function App() {
   const [isTimerPaused, setIsTimerPaused] = useState(
     initialState.isTimerPaused,
   );
+  const [errorCells, setErrorCells] = useState([]);
+
+  const checkErrors = () => {
+    const newErrorCells = [];
+    for (let i = 0; i < grid.length; i++) {
+      for (let j = 0; j < grid[i].length; j++) {
+        if (grid[i][j] !== 0 && grid[i][j] !== currentPuzzleSolution[i][j]) {
+          newErrorCells.push({ row: i, col: j });
+        }
+      }
+    }
+    setErrorCells(newErrorCells);
+  };
 
   useEffect(() => {
     // Only save to local storage if the grid is not empty
@@ -222,6 +235,17 @@ export default function App() {
       if (selectedCell.row === rowIndex && selectedCell.col === colIndex) {
         newGrid[rowIndex][colIndex] = 0;
         setGrid(newGrid);
+
+        // Remove the cell from errorCells if it's currently an error
+        if (
+          errorCells.some((ec) => ec.row === rowIndex && ec.col === colIndex)
+        ) {
+          setErrorCells(
+            errorCells.filter(
+              (ec) => ec.row !== rowIndex || ec.col !== colIndex,
+            ),
+          );
+        }
       }
     }
   };
@@ -231,6 +255,20 @@ export default function App() {
 
     const newGrid = [...grid];
     newGrid[selectedCell.row][selectedCell.col] = number;
+
+    // Remove the cell from errorCells if it's currently an error
+    if (
+      errorCells.some(
+        (ec) => ec.row === selectedCell.row && ec.col === selectedCell.col,
+      )
+    ) {
+      setErrorCells(
+        errorCells.filter(
+          (ec) => ec.row !== selectedCell.row || ec.col !== selectedCell.col,
+        ),
+      );
+    }
+
     setGrid(newGrid);
   };
 
@@ -238,6 +276,14 @@ export default function App() {
     const value = e.target.value ? parseInt(e.target.value, 10) : 0;
     const newGrid = [...grid];
     newGrid[rowIndex][colIndex] = value;
+
+    // Remove the cell from errorCells if it's currently an error
+    if (errorCells.some((ec) => ec.row === rowIndex && ec.col === colIndex)) {
+      setErrorCells(
+        errorCells.filter((ec) => ec.row !== rowIndex || ec.col !== colIndex),
+      );
+    }
+
     setGrid(newGrid);
   };
 
@@ -254,19 +300,18 @@ export default function App() {
     <div className="App">
       <h1 className="heading heading--one">Coloroku</h1>
       <div className="action-bar">
-        <p className="timer">{formatTime(timer)}</p>
-        <button className="button button--pause" onClick={togglePause}>
-          <span className="material-symbols-sharp">pause</span>
+        <p className="timer">
+          {formatTime(timer)}
+          <button className="button--pause" onClick={togglePause}>
+            <span className="material-symbols-sharp">pause</span>
+          </button>
+        </p>
+
+        <button className="button button--action" onClick={checkErrors}>
+          Check Puzzle
         </button>
       </div>
 
-      <div className="action-bar">
-        <div className="action-buttons">
-          {/* <button className="button button--action" onClick={checkSolution}>
-            Check Puzzle
-          </button> */}
-        </div>
-      </div>
       <Grid
         grid={grid}
         handleInputChange={handleInputChange}
@@ -274,6 +319,7 @@ export default function App() {
         onCellSelect={handleCellSelect}
         selectedCell={selectedCell}
         baseColors={currentColors}
+        errorCells={errorCells}
       />
 
       <div className="color-buttons">
