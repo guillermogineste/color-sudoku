@@ -353,7 +353,7 @@ export default function App() {
           </div>
         </AlertDialogContent>
       </AlertDialog>
-      {/* <button className="button button--debug" onClick={localStorage.clear()}>
+      <button className="button button--debug" onClick={localStorage.clear()}>
         Clear localStorage (Debug)
       </button>
       <button
@@ -361,7 +361,7 @@ export default function App() {
         onClick={solvePuzzleForDebugging}
       >
         Solve Puzzle (Debug)
-      </button> */}
+      </button>
     </div>
   );
 }
