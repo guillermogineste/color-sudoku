@@ -6,7 +6,8 @@ const Grid = ({
   onCellSelect,
   initialGrid,
   selectedCell,
-  baseColors
+  baseColors,
+  errorCells,
 }) => {
   return (
     <div className="grid">
@@ -24,6 +25,9 @@ const Grid = ({
                 isSelected={isSelected}
                 onSelect={() => onCellSelect(rowIndex, colIndex)}
                 backgroundColor={cell !== 0 ? baseColors[cell - 1] : null}
+                isError={errorCells.some(
+                  (ec) => ec.row === rowIndex && ec.col === colIndex,
+                )}
               />
             );
           })}
