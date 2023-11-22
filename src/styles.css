@@ -87,15 +87,21 @@
   transform: scale(1.1);
 }
 .button--color {
-  width: 5vw;
-  height: 5vw;
+  width: 42px;
+  height: 42px;
   padding: 12px;
   color: transparent;
   box-shadow: var(--cell-shadow);
   position: relative;
   -webkit-tap-highlight-color: transparent;
+  display: inline;
+  margin-right: 8px;
+  margin-bottom: 8px;
 }
-@media (min-width: 380px) {
+.button--color:last-of-type {
+  margin-right: 0;
+}
+/* @media (min-width: 380px) {
   .button--color {
     width: 9vw;
     height: 9vw;
@@ -118,7 +124,7 @@
     width: 50px;
     height: 50px;
   }
-}
+} */
 .button--color:hover {
   transform: scale(1.1);
   z-index: 100;
@@ -159,11 +165,12 @@
   gap: 8px;
 }
 .color-buttons {
-  display: flex;
+  /* display: flex;
   align-items: center;
   gap: 4px;
   height: 100%;
-  max-height: 300px;
+  max-height: 300px; */
+  padding: 5vh 24px;
 }
 
 .grid {
