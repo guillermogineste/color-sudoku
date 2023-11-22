@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./styles.css";
 import puzzles from "./puzzles.json";
-import colors from "./colors.json";
 import Grid from "./components/Grid";
 import {
   AlertDialog,
@@ -13,8 +12,8 @@ import {
 import partyPopperImage from "./images/party-popper_1f389.png";
 import pauseImage from "./images/pause-button_23f8-fe0f.png";
 
-const currentSet = "Nov21-2023";
-const currentColors = colors[currentSet];
+const currentSet = "Nov22-2023";
+const currentColors = puzzles[currentSet].Colors;
 const currentPuzzle = puzzles[currentSet].Puzzle;
 const currentPuzzleSolution = puzzles[currentSet].Solution;
 
