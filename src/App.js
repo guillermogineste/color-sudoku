@@ -94,6 +94,27 @@ export default function App() {
   }, [grid, initialGrid, selectedCell, timer, isTimerPaused, isPuzzleSolved]);
 
   useEffect(() => {
+    // Define the handler
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        setIsTimerPaused(true);
+        setShowPauseDialog(true);
+      } else {
+        // Optional: Resume the timer or keep it paused
+        // setIsTimerPaused(false);
+      }
+    };
+
+    // Add event listener
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    // Clean up the event listener
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
+  useEffect(() => {
     try {
       const savedDataString = localStorage.getItem("puzzleData");
       console.log("Saved Data String:", savedDataString); // Debugging statement
