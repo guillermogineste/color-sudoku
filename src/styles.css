@@ -227,7 +227,7 @@
 .cell--empty {
   background: white;
   box-shadow: none;
-  border: 1px solid lightgrey;
+  border: 1px solid #eae3db;
 }
 
 .cell--non-editable {
