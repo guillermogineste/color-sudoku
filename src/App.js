@@ -12,7 +12,7 @@ import {
 import partyPopperImage from "./images/party-popper_1f389.png";
 import pauseImage from "./images/pause-button_23f8-fe0f.png";
 
-const currentSet = "Nov29-2023";
+const currentSet = "Jul05-2024";
 const currentColors = puzzles[currentSet].Colors;
 const currentPuzzle = puzzles[currentSet].Puzzle;
 const currentPuzzleSolution = puzzles[currentSet].Solution;
